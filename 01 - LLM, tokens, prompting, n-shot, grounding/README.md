@@ -3,13 +3,13 @@
 
 In the ever-evolving landscape of artificial intelligence, OpenAI continues to lead the charge, pushing the boundaries of what is possible. Their latest initiative, a comprehensive generative AI course, is set to inspire and equip the next generation of AI enthusiasts and professionals. This course, part of a master's degree program, promises to be a beacon of knowledge and innovation, offering participants a deep dive into the fascinating world of AI and machine learning.
 
-![Diverse group of international students and professionals engaged in a dynamic online AI course](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/edit/main/01%20-%20LLM%2C%20tokens%2C%20prompting%2C%20n-shot%2C%20grounding/image_2.png)
+![Diverse group of international students and professionals engaged in a dynamic online AI course](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/01%20-%20LLM%2C%20tokens%2C%20prompting%2C%20n-shot%2C%20grounding/Image_2.png)
 
 The course, described as both "sexy and interesting" by its creators, is designed to be engaging and essential for everyone, regardless of their background. It brings together a diverse group of participants from various countries, creating a melting pot of ideas and perspectives akin to a United Nations Summit. This diversity is not just a testament to the global appeal of AI but also a crucial element in fostering a rich learning environment.
 
 One of the standout features of this course is its practical approach. Participants will not only learn about the theoretical aspects of AI and machine learning but will also get hands-on experience with coding, using platforms like OpenAI, and creating prototypes. This blend of theory and practice ensures that learners are well-equipped to tackle real-world challenges and contribute meaningfully to the field of AI.
 
-![Modern AI lab with a diverse team of AI researchers and developers collaborating on projects](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/edit/main/01%20-%20LLM%2C%20tokens%2C%20prompting%2C%20n-shot%2C%20grounding/image_3.png)
+![Modern AI lab with a diverse team of AI researchers and developers collaborating on projects](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/01%20-%20LLM%2C%20tokens%2C%20prompting%2C%20n-shot%2C%20grounding/Image_3.png)
 
 The course structure is meticulously planned, covering a wide range of topics from AI and ML overviews to large language models (LLMs) and tasks involving image and audio generation. The grading system is designed to encourage continuous learning and improvement, with practical tasks and a Capstone project forming the core of the assessment.
 
