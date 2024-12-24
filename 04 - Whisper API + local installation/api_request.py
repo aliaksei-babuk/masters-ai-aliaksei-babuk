@@ -1,10 +1,30 @@
+import os
 from openai import OpenAI
-client = OpenAI()
+from dotenv import load_dotenv
+from pydub import AudioSegment
 
-audio_file= open("/path/to/file/audio.mp3", "rb")
+# Ensure ffmpeg is installed and accessible
+#audio = AudioSegment.from_mp3("./Meeting_Recording.mp3")
+
+# PyDub handles time in milliseconds
+#ten_minutes = 10 * 60 * 1000
+
+#first_10_minutes = audio[:ten_minutes]
+
+#first_10_minutes.export("./ai_10.mp3", format="mp3")
+
+# Load environment variables from .env file
+load_dotenv()
+
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"), 
+)
+
+audio_file = open("./ACDC_Hells_Bells.mp4", "rb")
 transcription = client.audio.transcriptions.create(
     model="whisper-1", 
     file=audio_file
 )
 
-print(transcription.text)
+with open("README.md", "w", encoding="utf-8") as file:
+    file.write(transcription.text)
