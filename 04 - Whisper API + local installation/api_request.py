@@ -20,7 +20,7 @@ client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"), 
 )
 
-audio_file = open("./ACDC_Hells_Bells.mp4", "rb")
+audio_file = open("./ai_10.mp3", "rb")
 transcription = client.audio.transcriptions.create(
     model="whisper-1", 
     file=audio_file
