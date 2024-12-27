@@ -1,5 +1,7 @@
 # masters-ai
 
+Datasource https://www.kaggle.com/datasets/oktayrdeki/houses-in-london?resource=download
+
 In nex table london_houses we have Columns:
 
 Address: The address of the house.
@@ -27,6 +29,8 @@ The dataset appears to be well-structured and includes the relevant columns for 
 
 First, I'll ensure the dataset's columns have the correct data types for numerical analysis, then plot the histograms.
 
+
+```
 import pandas as pd
 
 # Load the CSV file to inspect its structure
@@ -35,7 +39,31 @@ london_houses_df = pd.read_csv(file_path)
 
 # Display the first few rows of the dataframe to understand its structure
 london_houses_df.head()
+import matplotlib.pyplot as plt
+
+# Ensure relevant columns are of numeric type
+columns_to_convert = ['Bedrooms', 'Bathrooms', 'Square Meters', 'Building Age', 'Price (£)']
+london_houses_df[columns_to_convert] = london_houses_df[columns_to_convert].apply(pd.to_numeric, errors='coerce')
+
+# Plot histograms for correlation between numerical features and Price
+features = ['Bedrooms', 'Bathrooms', 'Square Meters', 'Building Age']
+price = london_houses_df['Price (£)']
+
+plt.figure(figsize=(12, 10))
+
+for i, feature in enumerate(features, 1):
+    plt.subplot(2, 2, i)
+    plt.scatter(london_houses_df[feature], price, alpha=0.6)
+    plt.title(f'{feature} vs Price (£)')
+    plt.xlabel(feature)
+    plt.ylabel('Price (£)')
+
+plt.tight_layout()
+plt.show()
+```
+
 ![picture](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/05%20-%20OpenAI%20code%20interpreter%2C%20chat%20with%20data/Screenshot_1.png)
+
 The scatter plots illustrate how the Price (£) correlates with the following features:
 
 Bedrooms vs. Price: Shows a potential upward trend where more bedrooms are generally associated with higher prices.
