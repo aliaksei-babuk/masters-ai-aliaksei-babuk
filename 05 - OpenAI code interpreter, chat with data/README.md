@@ -35,7 +35,7 @@ london_houses_df = pd.read_csv(file_path)
 
 # Display the first few rows of the dataframe to understand its structure
 london_houses_df.head()
-[picture](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/05%20-%20OpenAI%20code%20interpreter%2C%20chat%20with%20data/Screenshot_1.png)
+![picture](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/05%20-%20OpenAI%20code%20interpreter%2C%20chat%20with%20data/Screenshot_1.png)
 The scatter plots illustrate how the Price (£) correlates with the following features:
 
 Bedrooms vs. Price: Shows a potential upward trend where more bedrooms are generally associated with higher prices.
