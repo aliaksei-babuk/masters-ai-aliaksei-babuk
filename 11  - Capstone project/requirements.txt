@@ -1,0 +1,8 @@
+openai>=1.0.0
+python-dotenv
+PyQt5
+azure-mgmt-resource
+azure-identity
+pandas
+streamlit
+openpyxl
