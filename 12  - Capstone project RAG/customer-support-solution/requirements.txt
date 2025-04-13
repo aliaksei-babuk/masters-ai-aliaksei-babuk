@@ -1,0 +1,12 @@
+streamlit
+gradio
+langchain
+faiss-cpu
+requests
+PyPDF2
+openai
+pandas
+numpy
+scikit-learn
+python-dotenv
+```

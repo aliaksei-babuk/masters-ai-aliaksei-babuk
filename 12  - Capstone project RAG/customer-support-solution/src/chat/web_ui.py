@@ -1,0 +1,40 @@
+import streamlit as st
+from chat.conversation_history import ConversationHistory
+from integrations.jira import create_support_ticket
+from document_processing.pdf_loader import load_documents
+from document_processing.citation_manager import CitationManager
+
+# Initialize conversation history and citation manager
+conversation_history = ConversationHistory()
+citation_manager = CitationManager()
+
+# Load documents for answering questions
+documents = load_documents()
+
+st.title("Customer Support Chatbot")
+
+# Display conversation history
+for message in conversation_history.get_history():
+    st.write(message)
+
+# User input for questions
+user_question = st.text_input("Ask a question:")
+
+if st.button("Submit"):
+    # Process the question and get an answer
+    answer, citations = citation_manager.answer_question(user_question, documents)
+    
+    # Update conversation history
+    conversation_history.add_message(f"You: {user_question}")
+    conversation_history.add_message(f"Bot: {answer} (Citations: {citations})")
+    
+    # Display the answer
+    st.write(f"**Bot:** {answer} (Citations: {citations})")
+
+# Support ticket creation
+ticket_summary = st.text_input("Ticket Summary:")
+ticket_description = st.text_area("Ticket Description:")
+
+if st.button("Create Support Ticket"):
+    response = create_support_ticket(ticket_summary, ticket_description)
+    st.write("Support Ticket Created:", response)
