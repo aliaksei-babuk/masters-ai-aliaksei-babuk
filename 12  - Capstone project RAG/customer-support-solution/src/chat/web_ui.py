@@ -4,6 +4,10 @@ from integrations.jira import create_support_ticket
 from document_processing.pdf_loader import load_documents
 from document_processing.citation_manager import CitationManager
 
+# Initialize session state for API key
+if "openai_api_key" not in st.session_state:
+    st.session_state["openai_api_key"] = ""
+
 # Initialize conversation history and citation manager
 conversation_history = ConversationHistory()
 citation_manager = CitationManager()
@@ -11,7 +15,25 @@ citation_manager = CitationManager()
 # Load documents for answering questions
 documents = load_documents()
 
-st.title("Customer Support Chatbot")
+# Web UI
+st.title("Customer Support Solution")
+
+# Input field for OpenAI API key
+st.sidebar.header("Settings")
+st.sidebar.text_input(
+    "Enter your OpenAI API Key:",
+    type="password",
+    key="openai_api_key",
+    help="Your OpenAI API key is required to use the AI features."
+)
+
+# Display the entered API key (for debugging purposes, remove in production)
+if st.session_state["openai_api_key"]:
+    st.sidebar.write("API Key set successfully!")
+
+# Main chat interface
+st.text_area("Chat with the assistant:", placeholder="Type your question here...")
+st.button("Send")
 
 # Display conversation history
 for message in conversation_history.get_history():
