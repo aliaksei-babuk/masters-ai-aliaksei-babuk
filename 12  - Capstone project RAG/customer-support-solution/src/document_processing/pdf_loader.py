@@ -26,3 +26,22 @@ def load_multiple_pdfs(file_paths):
         combined_metadata[file_path] = metadata
     
     return combined_text, combined_metadata
+
+def load_documents():
+    """
+    Load PDF documents from the 'data/documents' directory.
+    :return: A list of document texts.
+    """
+    documents_dir = os.path.join(os.path.dirname(__file__), "../data/documents")
+    documents = []
+
+    for filename in os.listdir(documents_dir):
+        if filename.endswith(".pdf"):
+            file_path = os.path.join(documents_dir, filename)
+            reader = PdfReader(file_path)
+            text = ""
+            for page in reader.pages:
+                text += page.extract_text()
+            documents.append({"filename": filename, "text": text})
+
+    return documents

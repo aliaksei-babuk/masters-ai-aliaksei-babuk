@@ -1,7 +1,7 @@
 import streamlit as st
 from chat.web_ui import display_chat
 from document_processing.pdf_loader import load_documents
-from integrations.jira import create_ticket
+
 
 def main():
     st.title("Customer Support Solution")

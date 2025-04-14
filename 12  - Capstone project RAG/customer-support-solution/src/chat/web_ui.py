@@ -1,8 +1,8 @@
 import streamlit as st
 from chat.conversation_history import ConversationHistory
-from integrations.jira import create_support_ticket
 from document_processing.pdf_loader import load_documents
 from document_processing.citation_manager import CitationManager
+from integrations.github import create_support_ticket  # Use GitHub integration
 
 # Initialize session state for API key
 if "openai_api_key" not in st.session_state:
@@ -60,3 +60,22 @@ ticket_description = st.text_area("Ticket Description:")
 if st.button("Create Support Ticket"):
     response = create_support_ticket(ticket_summary, ticket_description)
     st.write("Support Ticket Created:", response)
+
+def display_chat(documents):
+    """
+    Display the chat interface for interacting with the assistant.
+    :param documents: List of documents for answering questions.
+    """
+    st.title("Customer Support Chat")
+    user_question = st.text_input("Ask a question:")
+    
+    if st.button("Submit"):
+        # Process the question and get an answer
+        answer, citations = citation_manager.answer_question(user_question, documents)
+        
+        # Update conversation history
+        conversation_history.add_message(f"You: {user_question}")
+        conversation_history.add_message(f"Bot: {answer} (Citations: {citations})")
+        
+        # Display the answer
+        st.write(f"**Bot:** {answer} (Citations: {citations})")
