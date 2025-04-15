@@ -1,0 +1,644 @@
+Skip to content
+Chat history
+
+
+
+ChatGPT
+ChatGPT
+Sora icon
+Sora
+GPT Icon
+Research Questions Generator
+GPT Icon
+research questions asker
+
+1 more
+Explore GPTs
+
+Capstone_1
+
+SA_Masters
+Previous 7 Days
+Previous 30 Days
+February
+Serverless IoT Analytics Thesis
+Serverless IoT Analytics Theses
+IoT Serverless Architecture Thesis
+Nauka polskiego języka
+January
+2024
+View plans
+Unlimited access, team features, and more
+You said:
+на базе следующих требований разложи создание проекта программы по шагам и реализуй их в коде. Objective
+Build a Customer Support solution able to answer questions and raise support tickets.
+
+Business features
+Via web chat user can ask questions and get answers from datasources
+
+If the answer is not found the system suggest user to create a support ticket
+
+User can instruct system to create a support ticket
+
+Support ticket should have user name, user email, summary (title) and description with details
+
+Support ticket should be put into issue tracking system (Jira/Trello/Github etc.)
+
+System should cite document and page when answering from data, e.g. if the answer is from toyota-hilux manual system should mention the file name and the page with source
+
+System should support conversation history and keep the chat messages in context window
+
+AI system should know about the company it's working in, like name and contact information (phone/email)
+
+Data
+at least 3 documents should be used as a datasource
+
+at least 2 documents should be PDF
+
+at least 1 document should have 400 or more pages of PDF
+
+Technical requirements
+Solution should be build with python
+
+Python version and dependencies should be in the repository
+
+Solution may use any vector storage
+
+Interface
+Web UI should be build with Streamlit or Gradio
+
+Deployment
+Solution should be hosted at HuggingFace spaces
+ChatGPT said:
+Finished reasoning
+You said:
+на базе следующих требований разложи создание проекта программы по шагам и реализуй их в коде. Objective
+Build a Customer Support solution able to answer questions and raise support tickets.
+
+Business features
+Via web chat user can ask questions and get answers from datasources
+
+If the answer is not found the system suggest user to create a support ticket
+
+User can instruct system to create a support ticket
+
+Support ticket should have user name, user email, summary (title) and description with details
+
+Support ticket should be put into issue tracking system Github
+
+System should cite document and page when answering from data, e.g. if the answer is from toyota-hilux manual system should mention the file name and the page with source
+
+System should support conversation history and keep the chat messages in context window
+
+AI system should know about the company it's working in, like name and contact information (phone/email)
+
+Data
+at least 3 documents should be used as a datasource
+
+at least 2 documents should be PDF
+
+at least 1 document should have 400 or more pages of PDF
+
+Technical requirements
+Solution should be build with python
+
+Python version and dependencies should be in the repository
+
+Solution may use any vector storage
+
+Interface
+Web UI should be build with Streamlit 
+
+Deployment
+Solution should be hosted at HuggingFace spaces
+ChatGPT said:
+Reasoned for 9 seconds
+Ниже представлен пример пошагового плана по созданию решения на Python, которое позволит отвечать на вопросы пользователей по загруженным документам, при необходимости предлагать оформление тикета в GitHub и оформлять такой тикет по запросу. В качестве интерфейса используется Streamlit, а само приложение можно разместить на HuggingFace Spaces.
+
+Шаг 1. Подготовка окружения
+Создайте репозиторий (например, на GitHub), куда добавите весь код решения.
+
+Определите requirements.txt или аналогичный файл для хранения зависимостей.
+Пример содержимого (минимально необходимое, вы можете расширять список):
+
+streamlit
+requests
+langchain==0.0.200
+openai
+PyPDF2
+Установите нужную версию Python (например, 3.9 или 3.10) и убедитесь, что ваш проект использует именно её.
+
+Шаг 2. Подготовка данных
+Согласно требованиям:
+
+Нужно как минимум 3 документа.
+
+Из них 2 должны быть в формате PDF.
+
+Хотя бы один PDF должен содержать 400+ страниц.
+
+Пример структуры каталога с данными:
+
+data/
+  ├─ manual_1.pdf         (больше 400 стр.)
+  ├─ manual_2.pdf
+  ├─ some_doc.txt         (третий документ, можно использовать TXT или другой формат)
+(Здесь у вас могут быть любые реальные документы. В примере – просто заглушки.)
+
+Шаг 3. Индексация документов (создание векторного хранилища)
+Для хранения эмбеддингов документов можно использовать любую совместимую векторную СУБД. Ниже – пример с использованием FAISS локально. Для извлечения текста из PDF используем PyPDF2 или langchain-загрузчики.
+
+Пример кода (отдельный скрипт index_data.py):
+
+import os
+import faiss
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.document_loaders import PyPDFLoader, TextLoader
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+
+def index_documents(data_folder: str, faiss_index_path: str):
+    # 1) Инициализируем объект для эмбеддингов
+    embeddings = OpenAIEmbeddings(OPENAI_API_KEY="OPENAI_API_KEY")
+
+    all_docs = []
+
+    # 2) Проходимся по PDF-файлам
+    pdf_files = ["manual_1.pdf", "manual_2.pdf"]
+    for pdf_file in pdf_files:
+        loader = PyPDFLoader(os.path.join(data_folder, pdf_file))
+        pdf_docs = loader.load_and_split()
+        # В meta добавим имя файла, чтобы позже указывать при цитировании
+        for d in pdf_docs:
+            d.metadata["source_file"] = pdf_file
+        all_docs.extend(pdf_docs)
+
+    # 3) Загрузим дополнительный документ (TXT, DOCX и т.д.)
+    text_file = "some_doc.txt"
+    txt_loader = TextLoader(os.path.join(data_folder, text_file), encoding="utf-8")
+    txt_docs = txt_loader.load_and_split()
+    for d in txt_docs:
+        d.metadata["source_file"] = text_file
+    all_docs.extend(txt_docs)
+
+    # 4) Применим дополнительный текстовый сплиттер для удобства
+    #    (Если документы большие, это может быть особенно полезно)
+    splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    splitted_docs = splitter.split_documents(all_docs)
+
+    # 5) Создаём векторное хранилище FAISS
+    vectorstore = FAISS.from_documents(splitted_docs, embeddings)
+
+    # 6) Сохраняем локально
+    vectorstore.save_local(faiss_index_path)
+
+if __name__ == "__main__":
+    # Пути в вашем проекте
+    data_folder = "data"
+    faiss_index_path = "faiss_index"
+    index_documents(data_folder, faiss_index_path)
+    print("Индексация завершена.")
+Что здесь происходит:
+
+Считываем PDF-документы (хотя бы два).
+
+Считываем как минимум ещё один документ (третий).
+
+Дробим большие тексты на фрагменты.
+
+Превращаем эти фрагменты в эмбеддинги (через OpenAI).
+
+Сохраняем результат в FAISS.
+
+Шаг 4. Логика обработки вопросов и создания тикетов
+4.1 Обработка вопросов (поиск по векторному индексу)
+При получении вопроса мы должны:
+
+Найти векторное сходство вопроса с хранимыми фрагментами (через FAISS).
+
+Вернуть наиболее релевантные фрагменты текста, чтобы сформировать ответ.
+
+Если релевантность низкая или ответ не найден – предложить оформить тикет.
+
+4.2 Создание тикета в GitHub
+Требование – уметь создавать тикет в GitHub. Для этого можно использовать GitHub REST API и модуль requests.
+
+При создании тикета нужно указать:
+
+Имя пользователя (user name)
+
+Email
+
+Summary (заголовок)
+
+Description (подробности)
+
+Пример функции для создания тикета в GitHub (можно поместить в отдельный файл github_issue.py):
+
+import requests
+
+def create_github_issue(repo_owner, repo_name, token, title, body):
+    """
+    Создаёт тикет (issue) в GitHub.
+    :param repo_owner: владелец репозитория
+    :param repo_name: название репозитория
+    :param token: GitHub Personal Access Token
+    :param title: заголовок тикета
+    :param body: описание тикета
+    :return: ответ от GitHub API
+    """
+    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/issues"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json"
+    }
+    data = {
+        "title": title,
+        "body": body
+    }
+    response = requests.post(url, json=data, headers=headers)
+    if response.status_code == 201:
+        return f"Тикет создан: {response.json()['html_url']}"
+    else:
+        return f"Не удалось создать тикет. Код ответа: {response.status_code}, {response.text}"
+Шаг 5. Реализация Streamlit-приложения
+Ниже упрощённый пример кода Streamlit-приложения, которое:
+
+Загружает локально сохранённый FAISS-индекс.
+
+Позволяет пользователю ввести вопрос.
+
+Выполняет поиск по векторному хранилищу и формирует ответ.
+
+Если нужно, предлагает создать тикет.
+
+Создаёт тикет в GitHub, если пользователь соглашается или даёт команду.
+
+Файл app.py (основной для Streamlit):
+
+import streamlit as st
+import os
+import faiss
+import time
+from langchain.vectorstores import FAISS
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.chat_models import ChatOpenAI
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
+
+from github_issue import create_github_issue
+
+def load_vectorstore(faiss_index_path):
+    embeddings = OpenAIEmbeddings(OPENAI_API_KEY="OPENAI_API_KEY")
+    vectorstore = FAISS.load_local(faiss_index_path, embeddings)
+    return vectorstore
+
+def cite_source(page_content, metadata):
+    # Простейший вариант генерации "цитаты" – укажем имя файла и (если есть) номер страницы
+    source_file = metadata.get("source_file", "unknown_file")
+    page = metadata.get("page", None)
+    if page:
+        return f"Источник: {source_file}, страница {page}"
+    else:
+        return f"Источник: {source_file}"
+
+def generate_answer(question, vectorstore, conversation_history):
+    """
+    Используем chain для: 
+     1) Получения контекста из vectorstore 
+     2) Формирования ответа (через LLM).
+    """
+    llm = ChatOpenAI(model_name="gpt-3.5-turbo", OPENAI_API_KEY="OPENAI_API_KEY", temperature=0)
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+    qa_chain = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=vectorstore.as_retriever(),
+        memory=memory
+    )
+
+    # "Запустим" chain
+    result = qa_chain({"question": question, "chat_history": conversation_history})
+
+    # В result['source_documents'] обычно содержатся документы, на которые ссылается LLM
+    # Для иллюстрации укажем их явно.
+    answer_text = result["answer"]
+    cited_info = ""
+    for doc in result["source_documents"]:
+        # Добавим краткую ссылку (либо уточнить страницу)
+        cited_info += "\n" + cite_source(doc.page_content, doc.metadata)
+
+    # Возвращаем итоговый ответ + ссылки на источники
+    final_answer = answer_text.strip() + "\n\n" + "Использованные источники:" + cited_info
+    return final_answer, result["chat_history"]
+
+def main():
+    st.title("Customer Support Chatbot")
+    st.write("Добро пожаловать в систему поддержки! Компания: ExampleCorp, телефон: +1-202-555-0123, email: support@example.com")
+
+    if "conversation_history" not in st.session_state:
+        st.session_state["conversation_history"] = []
+
+    # Загрузка векторного хранилища (FAISS)
+    vectorstore = load_vectorstore("faiss_index")
+
+    user_question = st.text_input("Введите ваш вопрос:")
+
+    if st.button("Спросить"):
+        if user_question.strip():
+            answer, updated_history = generate_answer(user_question, vectorstore, st.session_state["conversation_history"])
+            st.session_state["conversation_history"] = updated_history
+            st.write("**Ответ:**")
+            st.write(answer)
+
+            # Простейшая логика "если ответ не найден" или "возможно, нужен тикет"
+            # В реальном коде можно анализировать, сравнивать score, etc.
+            if "не знаю" in answer.lower() or "не нашлось" in answer.lower():
+                st.warning("Кажется, нет точного ответа. Хотите создать тикет в GitHub?")
+                if st.button("Создать тикет"):
+                    # Запрашиваем у пользователя имя, email, детальную инфу
+                    user_name = st.text_input("Ваше имя:")
+                    user_email = st.text_input("Ваш email:")
+                    if st.button("Подтвердить создание тикета"):
+                        # title + body можем сгенерировать
+                        title = f"Вопрос от {user_name}"
+                        body = f"Email: {user_email}\nВопрос: {user_question}\nДетали: (опишите подробнее...)"
+                        # Создание тикета
+                        issue_url = create_github_issue(
+                            repo_owner="YourGitHubName",
+                            repo_name="YourRepo",
+                            token="YOUR_GITHUB_TOKEN",
+                            title=title,
+                            body=body
+                        )
+                        st.write(issue_url)
+        else:
+            st.info("Сначала введите вопрос.")
+
+    # Отображаем историю чата (упрощённо)
+    if st.session_state["conversation_history"]:
+        st.write("---")
+        st.write("## История диалога:")
+        for msg in st.session_state["conversation_history"]:
+            st.write(f"- {msg['role'].capitalize()}: {msg['content']}")
+
+if __name__ == "__main__":
+    main()
+Пояснения:
+
+Мы используем ConversationalRetrievalChain из LangChain для упрощения работы с контекстом.
+
+Храним историю в st.session_state["conversation_history"], чтобы поддерживать контекст в рамках одного сеанса.
+
+При желании оформить тикет – запрашиваем у пользователя данные и вызываем create_github_issue.
+
+При формировании ответа добавляем секцию «Использованные источники», где перечисляем ссылки (имя файла + страница).
+
+Шаг 6. Развёртывание на HuggingFace Spaces
+Зарегистрируйтесь или авторизуйтесь на HuggingFace.
+
+Создайте новый Space, выбрав Streamlit как SDK.
+
+Загрузите туда свой репозиторий (или подключите Space к вашему GitHub-репо).
+
+Убедитесь, что:
+
+В корне репозитория есть requirements.txt, включающий необходимые пакеты.
+
+Файл app.py находится в корне (или настройте main в настройках Spaces).
+
+После загрузки HuggingFace Spaces автоматически установит зависимости и запустит приложение.
+
+Итог
+Таким образом, мы получили:
+
+Анализ вопроса и ответы на основе PDF (и других) документов (минимум три, два из них PDF, один – 400+ страниц).
+
+При отсутствии ответа – предложение создать тикет.
+
+Функционал создания тикетов в GitHub со всеми необходимыми полями (имя, email, заголовок, описание).
+
+Поддержку контекста (истории чата) за счёт st.session_state и цепочки ConversationalRetrievalChain.
+
+Цитирование источников (название файла, страница).
+
+Интерфейс на Streamlit.
+
+Возможность развёртывания на HuggingFace Spaces.
+
+Вы при желании можете дорабатывать логику, добавлять авторизацию, собственные фильтры релевантности, UI-элементы и т.д. Но общий подход остаётся именно таким: сбор данных → индексирование в векторном виде → сервис вопрос-ответ + создание тикетов → Streamlit-интерфейс → публикация на HuggingFace.
+
+You said:
+покажи структуру файлов и папок проекта
+ChatGPT said:
+Reasoned about project file structure for a few seconds
+Ниже пример возможной структуры директорий и файлов в вашем проекте:
+
+my_support_solution/           <-- Корень проекта
+├─ data/                       <-- Папка с исходными документами
+│   ├─ manual_1.pdf           <-- PDF-файл (400+ страниц)
+│   ├─ manual_2.pdf           <-- Второй PDF-файл
+│   └─ some_doc.txt           <-- Третий документ (TXT, DOCX и т.п.)
+├─ faiss_index/               <-- Папка, куда будут сохраняться файлы индекса (FAISS)
+│   ├─ index
+│   └─ index.pkl
+├─ .gitignore                 <-- (Опционально) Файл для исключения из репозитория
+├─ requirements.txt           <-- Список зависимостей (streamlit, langchain, requests и т.п.)
+├─ README.md                  <-- Описание проекта
+├─ index_data.py              <-- Скрипт индексации и подготовки данных
+├─ github_issue.py            <-- Модуль для создания тикетов в GitHub
+├─ app.py                     <-- Основное Streamlit-приложение
+└─ LICENSE                    <-- (Опционально) Лицензия проекта
+В этой структуре:
+
+data/ хранит все документы, которые необходимо проиндексировать.
+
+faiss_index/ создаётся (или обновляется) после запуска index_data.py, чтобы сохранить индексационные файлы FAISS.
+
+index_data.py отвечает за чтение документов из data/, их обработку (разбиение на фрагменты), генерацию эмбеддингов и сохранение векторного индекса FAISS.
+
+github_issue.py содержит функцию для создания тикета в GitHub посредством вызова GitHub REST API.
+
+app.py — основной Streamlit-приложение, где реализован веб-интерфейс для взаимодействия с пользователем.
+
+requirements.txt указывает, какие Python-пакеты требуются для развертывания проекта.
+
+README.md (опционально) даёт краткую информацию о целях проекта, способах установки, запуска и т.д.
+
+Такую структуру можно напрямую разместить в репозитории (например, на GitHub), а затем подключить к HuggingFace Spaces для автоматического деплоя.
+
+You said:
+rfr pfgecnbnm ghjtrn
+ChatGPT said:
+Finished reasoning
+You said:
+как запустить проект
+ChatGPT said:
+Reasoned about project setup and execution for a second
+Ниже описан общий порядок запуска описанного проекта (предполагается, что файлы уже созданы и структура директории соответствует приведённому ранее примеру).
+
+1. Подготовьте окружение
+Убедитесь, что у вас установлен Python нужной версии (например, 3.9 или 3.10).
+
+Создайте виртуальное окружение (рекомендуется, чтобы не смешивать зависимости с другими проектами):
+
+python -m venv venv
+source venv/bin/activate  # для Linux/Mac
+# или
+venv\Scripts\activate     # для Windows
+Установите все необходимые пакеты из requirements.txt:
+
+pip install -r requirements.txt
+2. Индексируйте данные
+Скопируйте все необходимые документы в папку data/.
+Обратите внимание, что по требованиям у вас должно быть:
+
+как минимум 3 документа,
+
+2 из которых PDF,
+
+1 из них 400+ страниц.
+
+Запустите скрипт индексации, чтобы создать векторное хранилище (FAISS):
+
+python index_data.py
+В результате в папке faiss_index/ появятся файлы индекса.
+
+3. Запустите Streamlit-приложение
+Выполните команду:
+
+streamlit run app.py
+Откройте в браузере адрес, который выведет Streamlit (обычно http://localhost:8501 или http://127.0.0.1:8501).
+
+Вы увидите веб-интерфейс, где сможете:
+
+Задавать вопросы по загруженным документам.
+
+При необходимости создавать тикеты (issue) в GitHub (при корректно настроенном GitHub-токене в коде).
+
+4. Деплой на HuggingFace Spaces (опционально)
+Создайте Space на HuggingFace (выбирая Streamlit в качестве SDK).
+
+Подключите Space к GitHub-репозиторию или загрузите файлы напрямую, включая:
+
+requirements.txt
+
+app.py
+
+Все скрипты (например, index_data.py, github_issue.py и т.д.).
+
+Папку data/ (с документами) или (если объём велик) отдельный способ загрузки данных.
+
+После того как файлы окажутся на Spaces, HuggingFace автоматически установит зависимости и запустит приложение. В результате у вас будет публичная ссылка на ваше Streamlit-приложение в HuggingFace Spaces.
+
+Подсказки
+API-ключи и токены (OpenAI, GitHub) лучше не хранить в открытом виде:
+
+Можно использовать переменные окружения (os.environ).
+
+Для HuggingFace Spaces часто удобнее задать секреты (Secrets).
+
+Проверка корректности:
+
+Убедитесь, что после запуска index_data.py действительно появились файлы в faiss_index/.
+
+Убедитесь, что при вводе вопроса в приложении (app.py) цепочка поиска и генерация ответа ссылаются на нужные документы.
+
+Убедитесь, что при создании тикета в GitHub вы указали правильный Personal Access Token (с нужными правами) и корректные repo_owner и repo_name.
+
+Таким образом, чтобы запустить проект, достаточно:
+
+Установить зависимости из requirements.txt,
+
+Проиндексировать данные скриптом index_data.py,
+
+Затем запустить streamlit run app.py и перейти по адресу локального сервера.
+
+You said:
+.0.9 and will be removed in 1.0. An updated version of the class exists in the :class:~langchain-openai package and should be used instead. To use it run pip install -U :class:~langchain-openai and import as from :class:~langchain_openai import OpenAIEmbeddings`.
+  embeddings = OpenAIEmbeddings(OPENAI_API_KEY="OPENAI_API_KEY")
+Traceback (most recent call last):
+  File "C:\Users\AliakseiBabuk\Documents\SA_masters\masters-ai-aliaksei-babuk\12  - Capstone project RAG\index_data.py", line 47, in <module>
+    index_documents(data_folder, faiss_index_path)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AliakseiBabuk\Documents\SA_masters\masters-ai-aliaksei-babuk\12  - Capstone project RAG\index_data.py", line 17, in index_documents
+    loader = PyPDFLoader(os.path.join(data_folder, pdf_file))
+  File "C:\Users\AliakseiBabuk\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_community\document_loaders\pdf.py", line 281, in __init__
+    super().__init__(file_path, headers=headers)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AliakseiBabuk\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_community\document_loaders\pdf.py", line 140, in __init__
+    raise ValueError("File path %s is not a valid file or url" % self.file_path)
+ValueError: File path data\manual_1.pdf is not a valid file or url
+ChatGPT said:
+Reasoned about file loading error for 6 seconds
+Ошибка ValueError: File path data\manual_1.pdf is not a valid file or url обычно означает, что модуль PyPDFLoader не может найти указанный файл или не воспринимает путь к нему как корректный. Проверьте следующие моменты:
+
+Проверка существования файла
+Убедитесь, что в папке data действительно лежит файл manual_1.pdf (и что он так называется). Иногда проблемы возникают, если в названии файла есть лишние пробелы или буквы в другом регистре.
+
+Корректный путь
+
+Проверьте, что вы вызываете os.path.join(data_folder, pdf_file) действительно со строками "data" и "manual_1.pdf" (без опечаток).
+
+Убедитесь, что скрипт запускается из корневой директории проекта, где есть папка data.
+
+Попробуйте использовать прямые слеши (Linux-стиль) или сделать путь абсолютным:
+
+import os
+
+data_folder = os.path.abspath("data")  # Превращаем в абсолютный путь
+pdf_path = os.path.join(data_folder, "manual_1.pdf")
+print("Path:", pdf_path)  # Для проверки, что путь действительно верный
+
+loader = PyPDFLoader(pdf_path)
+Иногда (в зависимости от реализации PyPDFLoader) проще сразу указать абсолютный путь или использовать только прямые слеши:
+
+loader = PyPDFLoader("data/manual_1.pdf")
+Проблемы с форматом PDF
+Бывает, что библиотека не воспринимает повреждённые/невалидные PDF как корректные. Убедитесь, что manual_1.pdf действительно открывается любым PDF-ридером.
+
+Предупреждение о версии langchain / langchain_community
+В сообщении фигурирует совет перейти на from langchain_openai import OpenAIEmbeddings. Это связано с тем, что класс OpenAIEmbeddings переехал в отдельный пакет:
+
+Установите/обновите пакет:
+
+pip install -U langchain-openai
+Используйте импорт:
+
+from langchain_openai import OpenAIEmbeddings
+embeddings = OpenAIEmbeddings(OPENAI_API_KEY="OPENAI_API_KEY")
+Если вы пользуетесь новым официальным langchain (не langchain_community), можно сделать так:
+
+from langchain.embeddings import OpenAIEmbeddings
+(в зависимости от версии LangChain).
+
+Убедитесь, что langchain_community.docstore.pdf.PyPDFLoader совместим с вашей версией
+Если у вас новая версия LangChain, возможно, лучше использовать стандартный PyPDFLoader из langchain.document_loaders:
+
+from langchain.document_loaders import PyPDFLoader
+
+loader = PyPDFLoader("data/manual_1.pdf")
+Резюмируя:
+
+Проверьте, что файл действительно существует и путь к нему корректен.
+
+Убедитесь, что запускаете код из правильной директории.
+
+При необходимости используйте абсолютный путь.
+
+Попробуйте импорт PyPDFLoader из официального модуля langchain.document_loaders, если версия langchain_community даёт сбои.
+
+Внесите правку по поводу OpenAIEmbeddings, следуя предупреждению о переходе на пакет langchain-openai.
+
+
+
+
+
+
+
+
+Search
+
+
+
+ChatGPT can make mistakes. Check important info.
+?

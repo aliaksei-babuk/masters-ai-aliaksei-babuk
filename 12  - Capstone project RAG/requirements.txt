@@ -1,0 +1,5 @@
+streamlit
+requests
+langchain==0.0.200
+openai
+PyPDF2
