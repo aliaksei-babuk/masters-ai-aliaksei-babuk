@@ -8,7 +8,7 @@ Prompt: The DOOM 3 poster features a terrifying, hulking demonic creature in the
 ## DOOM original
 ![image](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/13%20-%20Capstone%20project%20AI%20art/1.jpg) 
 ## DOOM generated
-![image](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/13%20-%20Capstone%20project%20AI%20art/2.jpg) 
+![image](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/13%20-%20Capstone%20project%20AI%20art/2.png) 
 # Prompt for creating a Homer's Iliad book cover
 ```
     Prompt: The book cover for Homer's Iliad is designed in the style of ancient Greek art, with a heroic warrior prominently displayed on the cover. The warrior is adorned in detailed Corinthian armor, holding a spear and shield, standing proudly against a backdrop of a battlefield. The background features towering ancient structures, and in the distance, you can see the clash of armies, with gods and warriors battling. The title ILIAD is boldly displayed at the top in classical, engraved lettering, while the author’s name, HOMER, is featured at the bottom in a simpler yet elegant font. The color scheme incorporates earthy tones, gold, and deep reds, giving the cover a timeless and epic feel.
@@ -16,7 +16,7 @@ Prompt: The DOOM 3 poster features a terrifying, hulking demonic creature in the
 ## Iliad original
 ![image](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/13%20-%20Capstone%20project%20AI%20art/3.jpg) 
 ## Iliad generated
-![image](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/13%20-%20Capstone%20project%20AI%20art/4.jpg) 
+![image](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/13%20-%20Capstone%20project%20AI%20art/4.png) 
 # Prompt for generating a Rammstein concert poster
 ```
 Prompt: The poster for Rammstein features a dramatic, high-energy scene inspired by their iconic stage performances. The central focus is a fiery, imposing figure clad in industrial, mechanical armor, standing tall amidst an explosion of flames and smoke. Behind the figure, a massive, surreal stage with towering metal structures and large, blazing pyrotechnics fills the background, creating an atmosphere of raw power. The bold title RAMMSTEIN is displayed at the top in jagged, metallic letters, with sparks and embers flying from the edges. Dark, moody lighting and a heavy, metallic color palette dominate the design, perfectly capturing the intensity of the band's live shows.
@@ -24,4 +24,4 @@ Prompt: The poster for Rammstein features a dramatic, high-energy scene inspired
 ## Rammstein original
 ![image](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/13%20-%20Capstone%20project%20AI%20art/5.jpg) 
 ## Rammstein generated
-![image](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/13%20-%20Capstone%20project%20AI%20art/6.jpg) 
+![image](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/13%20-%20Capstone%20project%20AI%20art/6.png) 
