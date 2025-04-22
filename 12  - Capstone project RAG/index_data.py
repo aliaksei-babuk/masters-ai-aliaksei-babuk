@@ -13,7 +13,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def index_documents(data_folder: str, faiss_index_path: str):
     # 1) Инициализируем объект для эмбеддингов
-    embeddings = OpenAIEmbeddings(openai_api_key="OPENAI_API_KEY")
+    embeddings = OpenAIEmbeddings(openai_api_key=openai.api_key)
 
     all_docs = []
 

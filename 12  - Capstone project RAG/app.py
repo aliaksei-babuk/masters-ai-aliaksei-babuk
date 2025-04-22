@@ -12,9 +12,15 @@ from langchain.memory import ConversationBufferMemory
 from langchain.schema import HumanMessage, AIMessage
 from github_issue import create_github_issue
 
+# Set OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY")
+github.repo_owner = os.getenv("GITHUB_REPO_OWNER")
+github.repo_name = os.getenv("GITHUB_REPO_NAME")
+github.token = os.getenv("GITHUB_PAT_TOKEN")
+
 def load_vectorstore(faiss_index_path):
     embeddings = OpenAIEmbeddings(
-        openai_api_key="OPENAI_API_KEY"
+        openai_api_key=openai.api_key
     )
     vectorstore = FAISS.load_local(
         faiss_index_path,
@@ -35,7 +41,7 @@ def cite_source(page_content, metadata):
 def generate_answer(question, vectorstore, conversation_history):
     llm = ChatOpenAI(
         model_name="gpt-4",
-        openai_api_key="OPENAI_API_KEY",
+        openai_api_key=openai.api_key,
         temperature=0
     )
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
@@ -102,9 +108,9 @@ def main():
             title = f"Вопрос от {user_name}"
             body = f"Email: {user_email}\n\nОписание:\n{ticket_description}"
             issue_url = create_github_issue(
-                repo_owner="GITHUB_REPO_OWNERk",
-                repo_name="GITHUB_REPO_NAME",
-                token="GITHUB_PAT_TOKEN",
+                repo_owner=github.repo_owner,
+                repo_name=github.repo_name,
+                token=github.token,
                 title=title,
                 body=body
             )
