@@ -1,7 +1,8 @@
 streamlit
 requests
-langchain==0.0.200
+langchain==0.0.320
 openai
 PyPDF2
 python-dotenv
 faiss-cpu
+pydantic<2.0
