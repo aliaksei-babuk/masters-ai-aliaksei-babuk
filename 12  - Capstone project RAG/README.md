@@ -59,3 +59,6 @@
     streamlit run app.py
     
 Откройте адрес, указанный в консоли (обычно http://localhost:8501).
+
+## Hugging face
+https://huggingface.co/spaces/AliakseiBabuk/masters-ai-aliaksei-babuk
