@@ -61,5 +61,9 @@
 Откройте адрес, указанный в консоли (обычно http://localhost:8501).
 ## Created GitHub issue
 https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/issues
+## UI works examples
+![image](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/12%20%20-%20Capstone%20project%20RAG/1.png) 
+![image](https://github.com/aliaksei-babuk/masters-ai-aliaksei-babuk/blob/main/12%20%20-%20Capstone%20project%20RAG/2.png) 
+Локально получилось запустить на Hugging face вышле нестыковка версий пакетов пока не знаю как ее решить
 ## Hugging face
 https://huggingface.co/spaces/AliakseiBabuk/masters-ai-aliaksei-babuk
