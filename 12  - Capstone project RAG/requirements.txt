@@ -1,9 +1,10 @@
 streamlit
 requests
-langchain==0.0.320
 openai
 PyPDF2
 python-dotenv
 faiss-cpu
-pydantic<2.0
+pydantic
 langchain_community
+langchain-openai
+tiktoken
